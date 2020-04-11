@@ -1,0 +1,29 @@
+[gd_scene format=2]
+
+[node name="Main" type="Node2D"]
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="SpawnPoint0" type="Position2D" parent="Players"]
+position = Vector2( 102.132, 50.6294 )
+__meta__ = {
+"_gizmo_extents_": 100.0
+}
+
+[node name="SpawnPoint1" type="Position2D" parent="Players"]
+position = Vector2( 758.002, 60.3221 )
+__meta__ = {
+"_gizmo_extents_": 100.0
+}
+
+[node name="SpawnPoint2" type="Position2D" parent="Players"]
+position = Vector2( 743.463, 454.491 )
+__meta__ = {
+"_gizmo_extents_": 100.0
+}
+
+[node name="SpawnPoint3" type="Position2D" parent="Players"]
+position = Vector2( 105.363, 446.413 )
+__meta__ = {
+"_gizmo_extents_": 100.0
+}

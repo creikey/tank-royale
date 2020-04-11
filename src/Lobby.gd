@@ -25,6 +25,7 @@ func _on_player_info_update():
 		users_vbox.add_child(cur_player_info_hbox)
 		cur_player_info_hbox.username = LobbySingleton.player_info[player_id]["username"]
 		cur_player_info_hbox.color = LobbySingleton.player_info[player_id]["color"]
+		cur_player_info_hbox.ready = LobbySingleton.player_info[player_id]["ready"]
 
 func _on_UsernameEdit_text_changed(new_text):
 	LobbySingleton.my_info["username"] = new_text
@@ -32,4 +33,9 @@ func _on_UsernameEdit_text_changed(new_text):
 
 func _on_ColorEdit_color_changed(color):
 	LobbySingleton.my_info["color"] = color
+	LobbySingleton.my_info_changed()
+
+
+func _on_CheckBox_toggled(button_pressed):
+	LobbySingleton.my_info["ready"] = button_pressed
 	LobbySingleton.my_info_changed()

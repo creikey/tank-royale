@@ -14,15 +14,25 @@ __meta__ = {
 
 [node name="Username" type="Label" parent="."]
 margin_top = 6.0
-margin_right = 263.0
+margin_right = 188.0
 margin_bottom = 38.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 text = "creikey"
 
 [node name="Color" type="ColorRect" parent="."]
-margin_left = 267.0
-margin_right = 399.0
+margin_left = 192.0
+margin_right = 286.0
 margin_bottom = 44.0
 size_flags_horizontal = 3
 color = Color( 0.890196, 0.0705882, 0.0705882, 1 )
+
+[node name="ReadyLabel" type="Label" parent="."]
+margin_left = 290.0
+margin_top = 6.0
+margin_right = 398.0
+margin_bottom = 38.0
+size_flags_horizontal = 3
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+text = "not ready"
+align = 1

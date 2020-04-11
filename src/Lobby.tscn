@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://theme.tres" type="Theme" id=1]
 [ext_resource path="res://Lobby.gd" type="Script" id=2]
 [ext_resource path="res://InfoHBoxContainer.tscn" type="PackedScene" id=3]
+[ext_resource path="res://GameStartCountdown.gd" type="Script" id=4]
 
 [node name="Lobby" type="Node2D"]
 script = ExtResource( 2 )
@@ -27,9 +28,17 @@ margin_top = 7.0
 margin_right = 1017.0
 margin_bottom = 593.0
 
-[node name="MyInfoPanelContainer" type="PanelContainer" parent="UI/PanelContainer/VBoxContainer"]
+[node name="GameStartCountdown" type="Label" parent="UI/PanelContainer/VBoxContainer"]
 margin_right = 1010.0
-margin_bottom = 56.0
+margin_bottom = 32.0
+text = "Game Starting in: 3.0"
+align = 1
+script = ExtResource( 4 )
+
+[node name="MyInfoPanelContainer" type="PanelContainer" parent="UI/PanelContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 1010.0
+margin_bottom = 92.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/PanelContainer/VBoxContainer/MyInfoPanelContainer"]
 margin_left = 7.0
@@ -38,28 +47,34 @@ margin_right = 1003.0
 margin_bottom = 49.0
 
 [node name="Label" type="Label" parent="UI/PanelContainer/VBoxContainer/MyInfoPanelContainer/HBoxContainer"]
-margin_right = 329.0
+margin_right = 258.0
 margin_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "My Info:"
 
 [node name="UsernameEdit" type="LineEdit" parent="UI/PanelContainer/VBoxContainer/MyInfoPanelContainer/HBoxContainer"]
-margin_left = 333.0
-margin_right = 662.0
+margin_left = 262.0
+margin_right = 520.0
 margin_bottom = 42.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ColorEdit" type="ColorPickerButton" parent="UI/PanelContainer/VBoxContainer/MyInfoPanelContainer/HBoxContainer"]
-margin_left = 666.0
-margin_right = 996.0
+margin_left = 524.0
+margin_right = 782.0
 margin_bottom = 42.0
 size_flags_horizontal = 3
 edit_alpha = false
 
+[node name="CheckBox" type="CheckBox" parent="UI/PanelContainer/VBoxContainer/MyInfoPanelContainer/HBoxContainer"]
+margin_left = 786.0
+margin_right = 996.0
+margin_bottom = 42.0
+text = "ready checkbox"
+
 [node name="UsersPanel" type="PanelContainer" parent="UI/PanelContainer/VBoxContainer"]
-margin_top = 60.0
+margin_top = 96.0
 margin_right = 1010.0
 margin_bottom = 586.0
 size_flags_vertical = 3
@@ -68,6 +83,7 @@ size_flags_vertical = 3
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 1003.0
-margin_bottom = 519.0
+margin_bottom = 483.0
 [connection signal="text_changed" from="UI/PanelContainer/VBoxContainer/MyInfoPanelContainer/HBoxContainer/UsernameEdit" to="." method="_on_UsernameEdit_text_changed"]
 [connection signal="color_changed" from="UI/PanelContainer/VBoxContainer/MyInfoPanelContainer/HBoxContainer/ColorEdit" to="." method="_on_ColorEdit_color_changed"]
+[connection signal="toggled" from="UI/PanelContainer/VBoxContainer/MyInfoPanelContainer/HBoxContainer/CheckBox" to="." method="_on_CheckBox_toggled"]
