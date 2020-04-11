@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://theme.tres" type="Theme" id=1]
+[ext_resource path="res://TitleConnectScreen.gd" type="Script" id=2]
+[ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+content_margin_left = 50.0
+content_margin_right = 50.0
+content_margin_top = 50.0
+content_margin_bottom = 50.0
+
+[sub_resource type="DynamicFont" id=2]
+size = 72
+font_data = ExtResource( 3 )
+
+[node name="TitleConnectScreen" type="Node2D"]
+script = ExtResource( 2 )
+connect_button_path = NodePath("../TitleConnectScreen/UI/PanelContainer/TitleScreen/ConnectButton")
+status_label_path = NodePath("../TitleConnectScreen/UI/PanelContainer/TitleScreen/StatusLabel")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleScreen" type="VBoxContainer" parent="UI/PanelContainer"]
+margin_left = 50.0
+margin_top = 50.0
+margin_right = 974.0
+margin_bottom = 550.0
+
+[node name="Title" type="Label" parent="UI/PanelContainer/TitleScreen"]
+margin_right = 924.0
+margin_bottom = 330.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 2 )
+text = "Tank Royale"
+align = 1
+valign = 1
+
+[node name="ConnectButton" type="Button" parent="UI/PanelContainer/TitleScreen"]
+margin_top = 334.0
+margin_right = 924.0
+margin_bottom = 500.0
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+text = "Connect to server"
+
+[node name="StatusLabel" type="Label" parent="UI/PanelContainer/TitleScreen"]
+visible = false
+margin_top = 467.0
+margin_right = 924.0
+margin_bottom = 499.0
+[connection signal="pressed" from="UI/PanelContainer/TitleScreen/ConnectButton" to="." method="_on_ConnectButton_pressed"]

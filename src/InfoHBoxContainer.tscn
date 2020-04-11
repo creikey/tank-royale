@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://theme.tres" type="Theme" id=1]
+[ext_resource path="res://InfoHBoxContainer.gd" type="Script" id=2]
+
+[node name="InfoHBoxContainer" type="HBoxContainer"]
+margin_right = 399.0
+margin_bottom = 44.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Username" type="Label" parent="."]
+margin_top = 6.0
+margin_right = 263.0
+margin_bottom = 38.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+text = "creikey"
+
+[node name="Color" type="ColorRect" parent="."]
+margin_left = 267.0
+margin_right = 399.0
+margin_bottom = 44.0
+size_flags_horizontal = 3
+color = Color( 0.890196, 0.0705882, 0.0705882, 1 )

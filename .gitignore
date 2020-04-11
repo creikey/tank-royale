@@ -1,3 +1,10 @@
+# Exported games
+exports/
+
+# Private keys
+*.crt
+*.key
+*.pem
 
 # Godot-specific ignores
 .import/
