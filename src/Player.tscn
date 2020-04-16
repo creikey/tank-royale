@@ -8,7 +8,7 @@ size = 36
 font_data = ExtResource( 2 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 34.0285, 43.0097 )
+extents = Vector2( 43.1573, 33.4088 )
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -18,6 +18,8 @@ margin_left = -33.0
 margin_top = -43.0
 margin_right = 34.0
 margin_bottom = 43.0
+rect_rotation = 90.0
+rect_pivot_offset = Vector2( 33, 43 )
 color = Color( 0.819608, 0.819608, 0.819608, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -41,6 +43,7 @@ margin_left = -112.0
 margin_top = -137.0
 margin_right = 111.0
 margin_bottom = -94.0
+rect_pivot_offset = Vector2( 112, 137 )
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.72549, 0.72549, 0.72549, 1 )
 text = "creikey"

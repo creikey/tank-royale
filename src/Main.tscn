@@ -1,29 +1,45 @@
-[gd_scene format=2]
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://SpawnPoints.gd" type="Script" id=1]
+[ext_resource path="res://grid.png" type="Texture" id=2]
+[ext_resource path="res://GridBackground.gd" type="Script" id=3]
 
 [node name="Main" type="Node2D"]
 
-[node name="Players" type="Node2D" parent="."]
+[node name="GridBackground" type="CanvasLayer" parent="."]
+layer = -1
+script = ExtResource( 3 )
 
-[node name="SpawnPoint0" type="Position2D" parent="Players"]
-position = Vector2( 102.132, 50.6294 )
+[node name="Sprite" type="Sprite" parent="GridBackground"]
+modulate = Color( 0.87451, 0.87451, 0.87451, 1 )
+texture = ExtResource( 2 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 500, 0, 0, 0 )
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+script = ExtResource( 1 )
+
+[node name="SpawnPoint0" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 159.132, 137.317 )
 __meta__ = {
 "_gizmo_extents_": 100.0
 }
 
-[node name="SpawnPoint1" type="Position2D" parent="Players"]
-position = Vector2( 758.002, 60.3221 )
+[node name="SpawnPoint1" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 545.44, 147.01 )
 __meta__ = {
 "_gizmo_extents_": 100.0
 }
 
-[node name="SpawnPoint2" type="Position2D" parent="Players"]
-position = Vector2( 743.463, 454.491 )
+[node name="SpawnPoint2" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 542.776, 433.116 )
 __meta__ = {
 "_gizmo_extents_": 100.0
 }
 
-[node name="SpawnPoint3" type="Position2D" parent="Players"]
-position = Vector2( 105.363, 446.413 )
+[node name="SpawnPoint3" type="Position2D" parent="SpawnPoints"]
+position = Vector2( 183.738, 416.726 )
 __meta__ = {
 "_gizmo_extents_": 100.0
 }

@@ -3,6 +3,7 @@ extends Node
 # singleton for lobby management
 
 const port = 443
+const max_players = 4
 const url = "wss://a-hoy.club:" + str(port)
 
 signal player_info_updated
@@ -72,7 +73,15 @@ func _process(delta):
 				rset("start_game_countdown", start_game_countdown - delta)
 				if start_game_countdown <= 0.0:
 					game_active = true
-					rpc("pre_configure_game")
+					var main_scene: Node2D = preload("res://Main.tscn").instance()
+					var available_spawn_points = main_scene.get_node("SpawnPoints").get_children().duplicate()
+					var id_to_spawnpoint_name = {}
+					randomize()
+					for id in player_info:
+						var cur_index = randi()%available_spawn_points.size()
+						id_to_spawnpoint_name[id] = available_spawn_points[cur_index].name
+						available_spawn_points.remove(cur_index)
+					rpc("pre_configure_game", id_to_spawnpoint_name)
 			else:
 				rset("start_game_countdown", 3.0)
 	if client != null:
@@ -112,7 +121,7 @@ remote func register_player(info):
 	# Call function to update lobby UI here
 	emit_signal("player_info_updated")
 
-func spawn_player(peer_id: int, info: Dictionary, is_my_player: bool):
+func spawn_player(peer_id: int, info: Dictionary, is_my_player: bool, spawnpoint_name: String):
 	var my_player = preload("res://Player.tscn").instance()
 	my_player.set_name(str(peer_id))
 	my_player.get_node("Camera2D").current = is_my_player
@@ -121,19 +130,21 @@ func spawn_player(peer_id: int, info: Dictionary, is_my_player: bool):
 	my_player.modulate = info["color"]
 	my_player.username = info["username"]
 	
-	get_node("/root/Main/Players").add_child(my_player)
+	get_node("/root/Main/SpawnPoints").add_player(my_player, spawnpoint_name)
+#	get_node("/root/Main/Players").add_child(my_player)
 
-remote func pre_configure_game():
+remotesync func pre_configure_game(id_to_spawnpoint_name: Dictionary):
 	get_tree().set_pause(true)
 	var self_peer_id = get_tree().get_network_unique_id()
 	
 	get_tree().change_scene("res://Main.tscn")
 	yield(get_tree().create_timer(0.2), "timeout")
 	
-	spawn_player(self_peer_id, my_info, true)
+	if self_peer_id != 1:
+		spawn_player(self_peer_id, my_info, true, id_to_spawnpoint_name[self_peer_id])
 	
 	for p in player_info:
-		spawn_player(p, player_info[p], false)
+		spawn_player(p, player_info[p], false, id_to_spawnpoint_name[p])
 	
 	rpc_id(1, "done_preconfiguring", self_peer_id)
 
@@ -148,7 +159,7 @@ remote func done_preconfiguring(who):
 	if players_done_configuring.size() == player_info.size():
 		rpc("post_configure_game")
 
-remote func post_configure_game():
+remotesync func post_configure_game():
 	get_tree().set_pause(false)
 	# Game starts now!
 
