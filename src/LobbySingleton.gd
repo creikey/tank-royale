@@ -6,6 +6,9 @@ const port = 443
 const max_players = 4
 const url = "wss://a-hoy.club:" + str(port)
 
+const map_size := 15
+const wall_length = 200.0
+
 signal player_info_updated
 
 var server: WebSocketServer = null

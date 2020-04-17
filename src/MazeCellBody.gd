@@ -1,6 +1,5 @@
 extends StaticBody2D
 
-const wall_length = 200.0
 const line_thickness = 8.0
 
 export var line_color = Color()
@@ -12,6 +11,7 @@ func set_cell_data(new_cell_data):
 	update()
 
 func _ready():
+	var wall_length := LobbySingleton.wall_length
 	$LeftWall.shape.b.y = wall_length
 	$RightWall.position.x = wall_length
 	$TopWall.shape.b.x = wall_length
@@ -19,6 +19,7 @@ func _ready():
 	update()
 
 func _draw():
+	var wall_length := LobbySingleton.wall_length
 	if cell_data == null:
 		return
 	if not has_node("LeftWall"):
