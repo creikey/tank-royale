@@ -1,7 +1,19 @@
 extends Node2D
 
-var cur_target: Node2D = null
+var cur_target: Node2D = null setget set_cur_target
 #var map_size: Vector2 = Vector2(1000, 1000)
+
+func set_cur_target(new_cur_target):
+	cur_target = new_cur_target
+	if cur_target != null:
+		print("New camera target: ", new_cur_target.name)
+		cur_target.connect("die", self, "_on_cur_target_dead")
+	else:
+		print("New camerat arget is null!")
+
+func _on_cur_target_dead():
+	print("Cur target died!")
+	cur_target = null
 
 func _process(delta):
 	if cur_target != null:

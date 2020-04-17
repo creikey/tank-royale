@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Roboto-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Bullet.tscn" type="PackedScene" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 36
@@ -10,8 +11,11 @@ font_data = ExtResource( 2 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 43.1573, 33.4088 )
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=[
+"players",
+]]
 script = ExtResource( 1 )
+bullet_pack = ExtResource( 3 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_left = -33.0

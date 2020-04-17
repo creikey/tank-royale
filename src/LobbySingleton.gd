@@ -21,7 +21,7 @@ var players_done_configuring = []
 # Player info, associate ID to data
 var player_info = {}
 # Info we send to other players
-var my_info = { username = "creikey", color = Color8(255, 0, 255), ready = false }
+var my_info = { username = "creikey", color = Color8(255, 0, 255), ready = false, score = 0 }
 
 var game_active := false
 var printed_polling := false
@@ -124,6 +124,8 @@ remote func register_player(info):
 	# Call function to update lobby UI here
 	emit_signal("player_info_updated")
 
+remotesync func clear_players_done():
+	players_done_configuring.clear()
 
 	
 #	get_node("/root/Main/SpawnPoints").add_player(my_player, spawnpoint_name)
@@ -159,6 +161,10 @@ remote func done_preconfiguring(who):
 remotesync func post_configure_game():
 	get_tree().set_pause(false)
 	# Game starts now!
+
+remote func increment_my_score():
+	my_info["score"] += 1
+	my_info_changed()
 
 func my_info_changed():
 	rpc("register_player", my_info)

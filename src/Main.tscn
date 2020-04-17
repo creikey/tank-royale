@@ -1,12 +1,17 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://GeneratedMap.gd" type="Script" id=1]
 [ext_resource path="res://grid.png" type="Texture" id=2]
 [ext_resource path="res://GridBackground.gd" type="Script" id=3]
 [ext_resource path="res://MazeCellBody.tscn" type="PackedScene" id=4]
 [ext_resource path="res://CameraTarget.gd" type="Script" id=5]
+[ext_resource path="res://Main.gd" type="Script" id=6]
+[ext_resource path="res://theme.tres" type="Theme" id=7]
+[ext_resource path="res://LeaderboardPanelContainer.gd" type="Script" id=8]
+[ext_resource path="res://ScoreHBoxContainer.tscn" type="PackedScene" id=9]
 
 [node name="Main" type="Node2D"]
+script = ExtResource( 6 )
 
 [node name="GridBackground" type="CanvasLayer" parent="."]
 layer = -1
@@ -22,10 +27,12 @@ region_rect = Rect2( 500, 0, 0, 0 )
 [node name="GeneratedMap" type="Node2D" parent="."]
 script = ExtResource( 1 )
 maze_cell_body_pack = ExtResource( 4 )
-players_path = NodePath("../ Players")
+players_path = NodePath("../Players")
 camera_target_path = NodePath("../CameraTarget")
 
-[node name=" Players" type="Node2D" parent="."]
+[node name="Players" type="Node2D" parent="."]
+
+[node name="Bullets" type="Node2D" parent="."]
 
 [node name="CameraTarget" type="Node2D" parent="."]
 script = ExtResource( 5 )
@@ -33,3 +40,36 @@ script = ExtResource( 5 )
 [node name="Camera2D" type="Camera2D" parent="CameraTarget"]
 current = true
 smoothing_enabled = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="LeaderboardPanelContainer" type="PanelContainer" parent="UI"]
+self_modulate = Color( 1, 1, 1, 0.482353 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -199.0
+margin_bottom = 262.0
+theme = ExtResource( 7 )
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+score_hbox_container_pack = ExtResource( 9 )
+
+[node name="V" type="VBoxContainer" parent="UI/LeaderboardPanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 192.0
+margin_bottom = 255.0
+custom_constants/separation = 10
+
+[node name="InformationLabel" type="Label" parent="UI/LeaderboardPanelContainer/V"]
+margin_right = 185.0
+margin_bottom = 32.0
+text = "Leaderboard"
+align = 1
+
+[node name="ReloadGameTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+[connection signal="timeout" from="ReloadGameTimer" to="." method="_on_ReloadGameTimer_timeout"]
