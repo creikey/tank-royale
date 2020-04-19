@@ -2,8 +2,6 @@ extends KinematicBody2D
 
 const speed = 500.0
 
-signal die
-
 export (PackedScene) var bullet_pack
 
 var username := "" setget set_username
@@ -14,7 +12,13 @@ remote var target_transform := Transform2D()
 #remotesync var vertical_input := 0.0
 
 func _ready():
+	disable()
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	target_transform = global_transform
+
+func _player_disconnected(id):
+	if get_network_master() == id:
+		queue_free()
 
 func set_username(new_username):
 	username = new_username
@@ -32,17 +36,22 @@ remotesync func fire_bullet(bullet_transform: Transform2D, direction: Vector2, b
 	cur_bullet.set_network_master(1)
 
 func _input(event):
+	if not visible:
+		return
 	if is_network_master() and event.is_action_pressed("g_fire"):
 		number_of_bullets += 1
 		rpc("fire_bullet", global_transform, Vector2(1, 0).rotated(rotation), str(name,"_",number_of_bullets), get_tree().get_network_unique_id())
 
 func _physics_process(delta):
+	if not visible:
+		return
 	if is_network_master():
 		var horizontal := float(Input.is_action_pressed("g_right")) - float(Input.is_action_pressed("g_left"))
 		var vertical := float(Input.is_action_pressed("g_down")) - float(Input.is_action_pressed("g_up"))
 		rotation += deg2rad(horizontal*360.0*delta)
 		var _vel := move_and_slide(Vector2(speed*vertical, 0.0).rotated(rotation + PI))
 		rset_unreliable("target_transform", global_transform)
+#		print("Transmitting!")
 	else:
 		global_transform = target_transform
 	$UsernameLabel.rect_rotation = -rad2deg(rotation)
@@ -53,8 +62,18 @@ func _physics_process(delta):
 #	emit_signal("die")
 #	queue_free()
 
+func enable():
+	visible = true
+	$CollisionShape2D.disabled = false
+
+func disable():
+	visible = false
+	$CollisionShape2D.disabled = true
+
 remotesync func die():
 #	rpc("delete_myself")
-	emit_signal("die")
-	queue_free()
+#	emit_signal("die")
+#	queue_free()
+	disable()
+	
 	

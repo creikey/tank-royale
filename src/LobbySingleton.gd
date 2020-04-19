@@ -2,9 +2,10 @@ extends Node
 
 # singleton for lobby management
 
-const port = 443
-const max_players = 4
-const url = "wss://a-hoy.club:" + str(port)
+const global_port = 443
+const global_url = "wss://a-hoy.club:" + str(global_port)
+const local_port = 8885
+const local_url = "ws://127.0.0.1:" + str(local_port)
 
 const map_size := 15
 const wall_length = 200.0
@@ -19,33 +20,45 @@ remotesync var start_game_countdown := 3.0
 # have to wait for players to load in main scene
 var players_done_configuring = []
 # Player info, associate ID to data
-var player_info = {}
+remote var player_info = {}
 # Info we send to other players
 var my_info = { username = "creikey", color = Color8(255, 0, 255), ready = false, score = 0 }
 
 var game_active := false
-var printed_polling := false
-# Connect all functions
+
+func _get_adjacent_file(filename: String):
+	return load(ProjectSettings.globalize_path(str("res://", filename)))
 
 func _ready():
+
+	# cli loading of certs and game start
 	var args := OS.get_cmdline_args()
 	if args.size() > 0:
+		var processed_args = args
+
+		for i in processed_args.size():
+			processed_args[i] = processed_args[i].trim_prefix("--")
+
 		server = WebSocketServer.new()
-#		server.bind_ip = bind_ip
-		server.private_key = load("res://privkey.key")
-		server.ssl_certificate = load("res://fullchain.crt")
-		server.ca_chain = load("res://ca-certificates.crt")
+		
+		server.private_key = _get_adjacent_file(processed_args[0])
+		server.ssl_certificate = _get_adjacent_file(processed_args[1])
+		server.ca_chain = _get_adjacent_file(processed_args[2])
+
+		activate_server(global_port)
 		
 # warning-ignore:return_value_discarded
-		server.listen(port, PoolStringArray(), true)
-		get_tree().set_network_peer(server)
-		print("Serving on port ", port, "...")
 	var _err := get_tree().connect("network_peer_connected", self, "_player_connected")
 	_err = get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	_err = get_tree().connect("connected_to_server", self, "_connected_ok")
 	_err = get_tree().connect("connection_failed", self, "_connected_fail")
 	_err = get_tree().connect("server_disconnected", self, "_server_disconnected")
 
+func activate_server(port: int):
+	server.listen(port, PoolStringArray(), true)
+	get_tree().set_network_peer(server)
+	print("Serving on port ", port, "...")
+	
 
 func _everybody_ready() -> bool:
 	assert(get_tree().get_network_unique_id() == 1)
@@ -66,9 +79,6 @@ func _everybody_ready() -> bool:
 func _process(delta):
 	if server != null:
 		if server.is_listening():
-			if not printed_polling:
-				print("polling!")
-				printed_polling = true
 			server.poll()
 			if game_active:
 				return
@@ -96,6 +106,10 @@ func _process(delta):
 
 func _player_connected(id):
 	# Called on both clients and server when a peer connects. Send my info to it.
+#	if get_tree().is_network_server() and game_active:
+#		rset_id(id, "player_info", player_info)
+#		rpc_id(id, "pre_configure_game")
+	
 	print("Player connected: ", id)
 	rpc_id(id, "register_player", my_info)
 
@@ -126,8 +140,6 @@ remote func register_player(info):
 
 remotesync func clear_players_done():
 	players_done_configuring.clear()
-
-	
 #	get_node("/root/Main/SpawnPoints").add_player(my_player, spawnpoint_name)
 #	get_node("/root/Main/Players").add_child(my_player)
 
@@ -135,6 +147,7 @@ remotesync func pre_configure_game():
 	get_tree().set_pause(true)
 	var self_peer_id = get_tree().get_network_unique_id()
 	
+# warning-ignore:return_value_discarded
 	get_tree().change_scene("res://Main.tscn")
 #	yield(get_tree().create_timer(0.2), "timeout")
 	
@@ -143,8 +156,8 @@ remotesync func pre_configure_game():
 	
 #	for p in player_info:
 #		spawn_player(p, player_info[p], false, "test")
-	
-	rpc_id(1, "done_preconfiguring", self_peer_id)
+	if self_peer_id != 1:
+		rpc_id(1, "done_preconfiguring", self_peer_id)
 
 remote func done_preconfiguring(who):
 	# Here are some checks you can do, for example
@@ -168,6 +181,7 @@ remote func increment_my_score():
 
 func my_info_changed():
 	rpc("register_player", my_info)
+	emit_signal("player_info_updated")
 #	for id in player_info.keys():
 #		rpc_id(id, "register_player", my_info)
 #	rpc_id(1, "register_player", my_info)

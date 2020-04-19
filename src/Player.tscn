@@ -39,9 +39,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Camera2D" type="Camera2D" parent="."]
-smoothing_enabled = true
-
 [node name="UsernameLabel" type="Label" parent="."]
 margin_left = -112.0
 margin_top = -137.0

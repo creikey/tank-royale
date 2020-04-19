@@ -7,6 +7,13 @@ remote var target_transform: Transform2D = Transform2D()
 var movement_vector: Vector2 = Vector2(1, 0)
 var my_owner_id := 1
 
+func _ready():
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+
+func _player_disconnected(id):
+	if my_owner_id == id:
+		queue_free()
+
 func _physics_process(delta):
 	if not is_network_master():
 		global_transform = target_transform

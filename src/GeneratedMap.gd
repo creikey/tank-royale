@@ -77,7 +77,7 @@ func generate_map():
 		var row: int = spawn_point_data["row"]
 		var column: int = spawn_point_data["column"]
 		
-		print(id,"	",row,"	",column)
+#		print(id,"	",row,"	",column)
 		
 		id_to_spawnpoint[id] = Vector2(row, column)*wall_length + Vector2(wall_length, wall_length)/2.0
 		
@@ -93,7 +93,7 @@ func generate_map():
 	rpc("add_maze_bodies")
 	rpc("spawn_players")
 
-func spawn_player(peer_id: int, info: Dictionary, is_my_player: bool, spawnpoint: Vector2) -> Node2D:
+func spawn_player(peer_id: int, info: Dictionary, spawnpoint: Vector2) -> Node2D:
 	var cur_player = preload("res://Player.tscn").instance()
 	cur_player.set_name(str(peer_id))
 #	cur_player.get_node("Camera2D").current = is_my_player
@@ -104,16 +104,17 @@ func spawn_player(peer_id: int, info: Dictionary, is_my_player: bool, spawnpoint
 	
 	get_node(players_path).add_child(cur_player)
 	cur_player.position = spawnpoint
+	cur_player.enable()
 	return cur_player
 
 remotesync func spawn_players():
 	var my_id: int = get_tree().get_network_unique_id()
 	if my_id != 1:
-		var my_player := spawn_player(my_id, LobbySingleton.my_info, true, id_to_spawnpoint[my_id])
+		var my_player := spawn_player(my_id, LobbySingleton.my_info, id_to_spawnpoint[my_id])
 		get_node(camera_target_path).cur_target = my_player
 		
 	for id in LobbySingleton.player_info.keys():
-		spawn_player(id, LobbySingleton.player_info[id], false, id_to_spawnpoint[id])
+		var _new_player = spawn_player(id, LobbySingleton.player_info[id], id_to_spawnpoint[id])
 
 remotesync func add_maze_bodies():
 	var wall_length := LobbySingleton.wall_length

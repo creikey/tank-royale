@@ -5,6 +5,7 @@ export (PackedScene) var score_hbox_container_pack
 onready var information_vbox = $V
 
 func _ready():
+# warning-ignore:return_value_discarded
 	LobbySingleton.connect("player_info_updated", self, "_on_player_info_updated")
 	_on_player_info_updated()
 
@@ -21,6 +22,7 @@ func _on_player_info_updated():
 			continue
 		c.queue_free()
 	
-	_add_player(get_tree().get_network_unique_id(), LobbySingleton.my_info["username"], LobbySingleton.my_info["score"])
+	if not get_tree().is_network_server():
+		_add_player(get_tree().get_network_unique_id(), LobbySingleton.my_info["username"], LobbySingleton.my_info["score"])
 	for id in LobbySingleton.player_info.keys():
 		_add_player(id, LobbySingleton.player_info[id]["username"], LobbySingleton.player_info[id]["score"])

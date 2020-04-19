@@ -1,24 +1,29 @@
 extends Node2D
 
-var cur_target: Node2D = null setget set_cur_target
+var cur_target: Node2D = null
 #var map_size: Vector2 = Vector2(1000, 1000)
 
-func set_cur_target(new_cur_target):
-	cur_target = new_cur_target
-	if cur_target != null:
-		print("New camera target: ", new_cur_target.name)
-		cur_target.connect("die", self, "_on_cur_target_dead")
-	else:
-		print("New camerat arget is null!")
+#func set_cur_target(new_cur_target):
+#	cur_target = new_cur_target
+#	if cur_target != null:
+#		print("New camera target: ", new_cur_target.name)
+# warning-ignore:return_value_discarded
+#		cur_target.connect("die", self, "_on_cur_target_dead")
+#	else:
+#		print("New camerat target is null!")
 
-func _on_cur_target_dead():
-	print("Cur target died!")
-	cur_target = null
+#func _on_cur_target_dead():
+#	print("Cur target died!")
+#	cur_target = null
 
-func _process(delta):
+func _process(_delta):
 	if cur_target != null:
-		global_position = cur_target.global_position
-		return
+		if not cur_target.visible:
+			cur_target = null
+		else:
+			$Camera2D.zoom = Vector2(1, 1)
+			global_position = cur_target.global_position
+			return
 	
 	var map_size := LobbySingleton.map_size
 	var wall_length := LobbySingleton.wall_length
