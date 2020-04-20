@@ -52,9 +52,12 @@ func generate_map():
 				if column - 1 >= 0:
 					cell_data[row][column - 1]["right_barrier"] = false
 					cell_data[row][column]["left_barrier"] = false
-			if randi()%2 == 0 and row + 1 < cell_data.size():
-				cell_data[row + 1][column]["top_barrier"] = false
+			if row + 1 < cell_data.size():
 				cell_data[row][column]["bottom_barrier"] = false
+				cell_data[row + 1][column]["top_barrier"] = false
+#			if randi()%2 == 0 and row + 1 < cell_data.size():
+#				cell_data[row + 1][column]["top_barrier"] = false
+#				cell_data[row][column]["bottom_barrier"] = false
 
 #	var maze_wall_length: float = maze_cell_body_pack.instance().wall_length # this is bad but idc
 	

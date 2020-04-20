@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://theme.tres" type="Theme" id=1]
+[ext_resource path="res://ServerDisconnectedScreen.gd" type="Script" id=2]
+
+[node name="ServerDisconnectedScreen" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="UI/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 593.0
+
+[node name="V" type="VBoxContainer" parent="UI/PanelContainer/CenterContainer"]
+margin_left = 383.0
+margin_top = 256.0
+margin_right = 627.0
+margin_bottom = 330.0
+
+[node name="InformationLabel" type="Label" parent="UI/PanelContainer/CenterContainer/V"]
+margin_right = 244.0
+margin_bottom = 32.0
+text = "Server disconnected!"
+align = 1
+
+[node name="OKButton" type="Button" parent="UI/PanelContainer/CenterContainer/V"]
+margin_top = 36.0
+margin_right = 244.0
+margin_bottom = 74.0
+text = "Alright then"
+[connection signal="pressed" from="UI/PanelContainer/CenterContainer/V/OKButton" to="." method="_on_OKButton_pressed"]

@@ -29,6 +29,7 @@ func _on_ConnectButton_pressed():
 		connect_button.visible = true
 		return
 	get_tree().set_network_peer(LobbySingleton.client)
+	LobbySingleton.connect_client_signals()
 # warning-ignore:return_value_discarded
 	get_tree().connect("connection_failed", self, "_on_connection_error")
 # warning-ignore:return_value_discarded
